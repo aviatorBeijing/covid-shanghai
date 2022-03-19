@@ -2,7 +2,8 @@ import requests
 import pandas as pd
 import numpy as np 
 
-caseFiles = ['txt/cases-nosyndrome-clear.txt', 'txt/cases-confirmed-clear.txt']
+ds = '20220315'
+caseFiles = [f'txt/{ds}/cases-nosyndrome-clear.txt', f'txt/{ds}/cases-confirmed-clear.txt']
 
 for fn in caseFiles:
     # Txt to Dataframe
