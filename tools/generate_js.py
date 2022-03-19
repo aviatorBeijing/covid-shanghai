@@ -2,7 +2,7 @@ import requests
 import pandas as pd
 import numpy as np 
 
-ds = '20220315'
+ds = '20220318'
 caseFiles = [f'txt/{ds}/cases-nosyndrome-clear.txt', f'txt/{ds}/cases-confirmed-clear.txt']
 
 for fn in caseFiles:
