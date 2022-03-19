@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>上海Covid-19最新病例</title>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+    <script type="text/javascript" src="./data.js"></script>
+    
+    <style>
+        .annotate {
+            background-color: white;
+            margin: 0 auto;
+            color: rgb(0, 72, 136);
+            font-size: small;
+        }
+
+        .annotate>a {
+            text-decoration: none;
+            color: rgba(4, 102, 182, 0.623);
+        }
+
+        .annotate>a:visited {
+            text-decoration: none;
+        }
+
+        .annotate>a:hover {
+            text-decoration: none;
+            color: rgb(0, 72, 136);
+        }
+
+        .author {
+            font-size: small;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='printoutPanel'></div>
+    <div id='myMap' style='width: 100vw; height: 100vh;'></div>
+
+    <script type='text/javascript'>
+        function getIcon(sz) {
+            var minRadius = 6;
+            var outlineWidth = 3;
+
+            //Get the number of pushpins in the cluster
+            var clusterSize = sz;
+
+            //Calculate the radius of the cluster based on the number of pushpins in the cluster, using a logarithmic scale.
+            var radius = Math.log(clusterSize) / Math.log(10) * 5 + minRadius;
+
+            //Default cluster color is red.
+            var fillColor = 'rgba(255, 40, 40, 0.5)';
+            if (clusterSize < 5) {
+                //Make the cluster green if there are less than 10 pushpins in it.
+                fillColor = 'rgba(20, 180, 20, 0.5)';
+            } else if (clusterSize < 10) {
+                //Make the cluster yellow if there are 10 to 99 pushpins in it.
+                fillColor = 'rgba(255, 180, 40, 0.5)';
+            }
+
+            //Create an SVG string of two circles, one on top of the other, with the specified radius and color.
+            var svg = ['<svg xmlns="http://www.w3.org/2000/svg" width="', (radius * 2), '" height="', (radius * 2), '">',
+                '<circle cx="', radius, '" cy="', radius, '" r="', radius, '" fill="', fillColor, '"/>',
+                '<circle cx="', radius, '" cy="', radius, '" r="', radius - outlineWidth, '" fill="', fillColor, '"/>',
+                '</svg>'];
+
+            return svg.join('');
+        }
+        function initMap() {
+            var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
+                credentials: 'AtFndAYp4OWEHJQ5yXf2q8CNN2G8dwHZQ_gEU09JZOjdv7wRPMR6Jwkcg3MkaO4N',
+                mapTypeId: Microsoft.Maps.MapTypeId.road,
+            });
+
+            //Request the user's location
+            /*navigator.geolocation.getCurrentPosition(function (position) {
+                var loc = new Microsoft.Maps.Location(
+                    position.coords.latitude,
+                    position.coords.longitude);
+
+                var pin = new Microsoft.Maps.Pushpin(
+                    loc,
+                    {
+                        icon: 'http://icons.iconarchive.com/icons/icons-land/vista-map-markers/24/Map-Marker-Marker-Outside-Chartreuse-icon.png'
+                    }
+                );
+                map.entities.push(pin);
+                map.setView({ center: loc, zoom: 11 });
+            });
+            */
+
+            fromUrl = '<a href="https://wsjkw.sh.gov.cn/yqtb/index.html" target="_blank">数据源</a>（更新:2022/03/18 21:30:00）'
+            authorName = '<span class=author>by: j.ma (AT) westbundgroup (DOT) com </span>'
+            document.getElementById('printoutPanel').innerHTML = "<div class='annotate'>" + fromUrl + authorName + "</div>";
+
+            //pushpinInfos = pushpinInfos.slice(18,19)
+            var infoboxLayer = new Microsoft.Maps.EntityCollection();
+            var pinLayer = new Microsoft.Maps.EntityCollection();
+            var pinInfobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(0, 0), { visible: false });
+            infoboxLayer.push(pinInfobox);
+            var locs = [];
+            for (var i = 0; i < pushpinInfos.length; i++) {
+                locs[i] = new Microsoft.Maps.Location(pushpinInfos[i].lat, pushpinInfos[i].lng);
+                //var pin = new Microsoft.Maps.Pushpin(locs[i], { icon: pushpinInfos[i].icon, width: '20px', height: '20px' });
+                var pin = new Microsoft.Maps.Pushpin(locs[i], { icon: getIcon(pushpinInfos[i].count), width: '20px', height: '20px' });
+                pin.Title = pushpinInfos[i].title;
+                pin.Description = pushpinInfos[i].description;
+                pinLayer.push(pin);
+                Microsoft.Maps.Events.addHandler(pin, 'mouseover', displayInfobox);
+                Microsoft.Maps.Events.addHandler(pin, 'mouseout', hideInfobox);
+            }
+            map.entities.push(pinLayer);
+            map.entities.push(infoboxLayer);
+            var bestview = Microsoft.Maps.LocationRect.fromLocations(locs);
+            map.setView({ center: bestview.center, zoom: 10 });
+
+            function displayInfobox(e) {
+                if (e.targetType == 'pushpin') {
+                    pinInfobox.setLocation(e.target.getLocation());
+                    pinInfobox.setOptions({ title: e.target.Title, description: e.target.Description, visible: true, offset: new Microsoft.Maps.Point(0, 25) });
+                    pinInfobox.setLocation(e.target.getLocation());
+                }
+            }
+            function hideInfobox(e) {
+                if (e.targetType == 'pushpin') {
+                    pinInfobox.setLocation(e.target.getLocation());
+                    pinInfobox.setOptions({ visible: false });
+                }
+            }
+
+        }
+    </script>
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=initMap' async defer></script>
+</body>
+
+</html>
