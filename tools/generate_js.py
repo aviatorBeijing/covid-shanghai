@@ -2,6 +2,7 @@ import requests,sys
 import pandas as pd
 import numpy as np 
 import click 
+import os
 
 # Fetch address
 """
@@ -24,10 +25,16 @@ def main(date):
         sys.exit()
     
     ds = date
-    caseFiles = [f'txt/{ds}/cases-nosyndrome-clear.txt', f'txt/{ds}/cases-confirmed-clear.txt']
+    caseFiles = [
+        f'txt/{ds}/cases-nosyndrome-clear.txt', 
+        f'txt/{ds}/cases-confirmed-clear.txt',
+        f'txt/{ds}/cases-location-clear.txt'
+        ]
 
     for fn in caseFiles:
         # Txt to Dataframe
+        if not os.path.exists( fn ): 
+            continue
         items = []
         with open(fn, 'r') as fh:
             for line in fh.readlines():
@@ -74,7 +81,7 @@ def main(date):
                 cases += [ {'sex': fds[0],
                             'age': fds[1], 
                             'address':fds[2],
-                            'status': '确诊' if 'confirm' in fn else '无症状',
+                            'status': '确诊' if 'confirm' in fn else '无症状' if 'syndrom' in fn else '未知',
                             } ]
     cases = pd.DataFrame.from_records( cases )
     cases['age'] = cases.age.apply(lambda e: e.strip('岁'))
@@ -108,18 +115,19 @@ def main(date):
         if (case.address, case.status) in tmp: 
             continue
         tmp.add( (case.address, case.status) )
-        for status in ['确诊','无症状']:
+        for status in ['确诊','无症状', '未知']:
             try:
                 cnt = count_cases[ (case.address, status) ]
             except KeyError as _:
                 continue
-            codes += [ "pushpinInfos[%d] = {'lat': %s, 'lng': %s, 'title': \'%s\', 'description': \'%s\', 'count': %d};\n"%(
+            codes += [ "pushpinInfos[%d] = {'lat': %s, 'lng': %s, 'title': \'%s\', 'description': \'%s\', 'count': %d, 'status': \'%s\'};\n"%(
                 idx, 
                 case.lat,
                 case.lng,
                 case.address,
                 f"{status} {cnt}人",
                 cnt,
+                status
             ) ]
             idx+=1
 

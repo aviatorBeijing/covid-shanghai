@@ -39,24 +39,32 @@
     <div id='myMap' style='width: 100vw; height: 100vh;'></div>
 
     <script type='text/javascript'>
-        function getIcon(sz) {
-            var minRadius = 12;
-            var outlineWidth = 7;
+        function getIcon(sz, status) {
+            if (status == '未知'){
+                var minRadius = 3;
+                var outlineWidth = 3;
+                var radius = 3;
+                var fillColor = 'rgba(255, 0, 0, 0.5)';
+            }
+            else{
+                var minRadius = 12;
+                var outlineWidth = 7;
 
-            //Get the number of pushpins in the cluster
-            var clusterSize = sz;
+                //Get the number of pushpins in the cluster
+                var clusterSize = sz;
 
-            //Calculate the radius of the cluster based on the number of pushpins in the cluster, using a logarithmic scale.
-            var radius = Math.log(clusterSize) / Math.log(10) * 5 + minRadius;
+                //Calculate the radius of the cluster based on the number of pushpins in the cluster, using a logarithmic scale.
+                var radius = Math.log(clusterSize) / Math.log(10) * 5 + minRadius;
 
-            //Default cluster color is red.
-            var fillColor = 'rgba(255, 40, 40, 0.5)';
-            if (clusterSize < 5) {
-                //Make the cluster green if there are less than 10 pushpins in it.
-                fillColor = 'rgba(20, 180, 20, 0.5)';
-            } else if (clusterSize < 10) {
-                //Make the cluster yellow if there are 10 to 99 pushpins in it.
-                fillColor = 'rgba(255, 180, 40, 0.5)';
+                //Default cluster color is red.
+                var fillColor = 'rgba(255, 40, 40, 0.5)';
+                if (clusterSize < 5) {
+                    //Make the cluster green if there are less than 10 pushpins in it.
+                    fillColor = 'rgba(20, 180, 20, 0.5)';
+                } else if (clusterSize < 10) {
+                    //Make the cluster yellow if there are 10 to 99 pushpins in it.
+                    fillColor = 'rgba(255, 180, 40, 0.5)';
+                }
             }
 
             //Create an SVG string of two circles, one on top of the other, with the specified radius and color.
@@ -103,9 +111,13 @@
             for (var i = 0; i < pushpinInfos.length; i++) {
                 locs[i] = new Microsoft.Maps.Location(pushpinInfos[i].lat, pushpinInfos[i].lng);
                 //var pin = new Microsoft.Maps.Pushpin(locs[i], { icon: pushpinInfos[i].icon, width: '20px', height: '20px' });
-                var pin = new Microsoft.Maps.Pushpin(locs[i], { icon: getIcon(pushpinInfos[i].count), width: '20px', height: '20px' });
+                var pin = new Microsoft.Maps.Pushpin(locs[i], { 
+                    icon: getIcon(pushpinInfos[i].count, pushpinInfos[i].status), 
+                    width: '20px', height: '20px' });
                 pin.Title = pushpinInfos[i].title;
-                pin.Description = pushpinInfos[i].description;
+                if(pushpinInfos[i].status!='未知'){ pin.Description = pushpinInfos[i].description; }
+                else{ pin.Description = ''; }
+                
                 pinLayer.push(pin);
                 Microsoft.Maps.Events.addHandler(pin, 'mouseover', displayInfobox);
                 Microsoft.Maps.Events.addHandler(pin, 'mouseout', hideInfobox);
