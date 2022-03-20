@@ -105,19 +105,23 @@ def main(date):
     idx = 0
     for i in range(0,cases.shape[0]):
         case = cases.iloc[i]
-        if case.address in tmp: 
+        if (case.address, case.status) in tmp: 
             continue
-        tmp.add( case.address )
-        status, cnt = count_cases_[case.address]
-        codes += [ "pushpinInfos[%d] = {'lat': %s, 'lng': %s, 'title': \'%s\', 'description': \'%s\', 'count': %d};\n"%(
-            idx, 
-            case.lat,
-            case.lng,
-            case.address,
-            f"{status} {cnt}人",
-            cnt,
-        ) ]
-        idx+=1
+        tmp.add( (case.address, case.status) )
+        for status in ['确诊','无症状']:
+            try:
+                cnt = count_cases[ (case.address, status) ]
+            except KeyError as _:
+                continue
+            codes += [ "pushpinInfos[%d] = {'lat': %s, 'lng': %s, 'title': \'%s\', 'description': \'%s\', 'count': %d};\n"%(
+                idx, 
+                case.lat,
+                case.lng,
+                case.address,
+                f"{status} {cnt}人",
+                cnt,
+            ) ]
+            idx+=1
 
     with open('data.js','w') as fh:
         fh.writelines(codes)
