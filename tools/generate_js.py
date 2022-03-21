@@ -44,7 +44,9 @@ def main(date):
             map( lambda e: {'sex': e[0], 'age': e[1], 'address':e[2]}, items)
         )
         df = pd.DataFrame.from_dict(items)
-
+        if df.empty:
+            print( f'empty: {fn}')
+            continue
         def get_by_address(addressLine):
             global cached
             if not cached.empty:

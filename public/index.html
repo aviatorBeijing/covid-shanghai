@@ -26,6 +26,7 @@
         .annotate>a:hover {
             text-decoration: none;
             color: rgb(0, 72, 136);
+            color:rgb(241, 3, 201);
         }
 
         .author {
@@ -40,11 +41,17 @@
 
     <script type='text/javascript'>
         function getIcon(sz, status) {
+            var red = 'rgba(255, 40, 40, 0.5)';
+            var gre = 'rgba(20, 180, 20, 0.5)';
+            var yel = 'rgba(241, 166, 3, 0.5)';
+            var meg = 'rgba(241, 3, 201, 0.5)';
+
+            var fillColor = gre;
             if (status == '未知'){
                 var minRadius = 1;
                 var outlineWidth = 2;
                 var radius = 3;
-                var fillColor = 'rgba(255, 0, 0, 0.5)';
+                fillColor = red;
             }
             else{
                 var minRadius = 12;
@@ -55,16 +62,8 @@
 
                 //Calculate the radius of the cluster based on the number of pushpins in the cluster, using a logarithmic scale.
                 var radius = Math.log(clusterSize) / Math.log(10) * 5 + minRadius;
-
-                //Default cluster color is red.
-                var fillColor = 'rgba(255, 40, 40, 0.5)';
-                if (clusterSize < 5) {
-                    //Make the cluster green if there are less than 10 pushpins in it.
-                    fillColor = 'rgba(20, 180, 20, 0.5)';
-                } else if (clusterSize < 10) {
-                    //Make the cluster yellow if there are 10 to 99 pushpins in it.
-                    fillColor = 'rgba(255, 180, 40, 0.5)';
-                }
+                if (status=='无症状') fillColor = yel;
+                if (status=='确诊') fillColor = red;
             }
 
             //Create an SVG string of two circles, one on top of the other, with the specified radius and color.
