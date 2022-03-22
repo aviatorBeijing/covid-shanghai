@@ -12,7 +12,7 @@ var myStyle = {
         "point": { "iconColor": "#ffffff", "fillColor": "#FF6FA0", "strokeColor": "#DB4680" },
         "transit": { "fillColor": "#AA6DE0" }
     },
-    "version": "1.0" 
+    "version": "1.0"
 };
 
 var fadedEffect = {
