@@ -115,8 +115,7 @@
             }
         }
 
-        // Entry point
-        function initMap() {
+        function getMap(){
             var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
                 credentials: 'AuhNsamwGe5V990rZfzmGKwOM2to57T2Q6SJPU2qMYHso3b_Db5lkyn5mxTcapeU',
                 mapTypeId: Microsoft.Maps.MapTypeId.road,
@@ -139,6 +138,12 @@
                 map.setView({ center: loc, zoom: 11 });
             });
             */
+           return map;
+        }
+
+        // Entry point
+        function initMap() {
+            var map = getMap();
 
             fromUrl = '<a href="https://wsjkw.sh.gov.cn/xwfb/index.html" target="_blank">数据源</a>（更新:2022/03/22 10:42:00）'
             authorName = '<span class=author>by: j.ma (AT) westbundgroup (DOT) com </span>'
