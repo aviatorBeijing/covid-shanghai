@@ -18,7 +18,12 @@ def main( params ):
         sex, age, address = args[i*3], args[i*3+1], args[i*3+2]
         if address in districts:
             named_district = address;continue
-        print( sex, age, f"{named_district}{address}")
+        if '、' in address:
+            address = address.split('、')
+        else:
+            address = [address]
+        for addr in address:
+            print( sex, age, f"{named_district}{addr}")
 
 if __name__ == '__main__':
     main( sys.argv)
