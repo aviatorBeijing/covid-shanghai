@@ -8,14 +8,16 @@ districts = [
     '杨浦区',
     '闵行区',
     '徐汇区',
+    '青浦区',
     '长宁区','黄浦区','虹口区','宝山区','普陀区','静安区'
 ]
 def main( params ):
     assert( len(params)>1)
     args = params[1:]
     named_district = None
-    for i in range( len(args)//3 ):
-        sex, age, address = args[i*3], args[i*3+1], args[i*3+2]
+    for addr in args:
+        #sex, age, address = args[i*3], args[i*3+1], args[i*3+2]
+        sex, age, address = '无', 1, addr
         if address in districts:
             named_district = address;continue
         if '、' in address:
