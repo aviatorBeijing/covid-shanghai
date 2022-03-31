@@ -21,17 +21,25 @@ def main( params ):
         if len(fds) == 2:
             fds = [ fds[0] ] + fds
 
-        try:
-            assert( len(fds) == 3 )
-        except AssertionError as e:
-            print( e )
-            raise e
-        if len(fds) == 3:
+        if len(fds) == 3: # new data format since 3/27
             num = int(fds[1])-int(fds[0]) + 1
             if fds[2] in rsts:
                 rsts[ fds[2] ] += num
             else:
                 rsts[ fds[2] ] = num
+        elif len(fds) == 4: # old data format until 3/26
+            num = 1
+            if fds[3] in rsts:
+                rsts[ fds[3] ] += 1
+            else:
+                rsts[ fds[3] ] = 1
+        elif len(fds) > 4:
+            for i in range(len(fds)):
+                if i%3 == 0:
+                    if fds[i] in rsts: rsts[fds[i]] += 1
+                    else: rsts[fds[i]] = 1
+        else:
+            raise Exception(f"{len(fds)} fields are not handled!")
     
     # due to the change in the public annoucement format changed on 3/27: no sex, no age anymore. 
     for k,v in rsts.items():
