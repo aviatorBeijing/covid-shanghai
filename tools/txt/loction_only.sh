@@ -5,4 +5,9 @@ sed 's/。/./g' $1/$RAW_FILE | tr ',' '\n' | sed 's/、$//g' | sed 's/，$//g' |
 python merg.py x | sort | uniq > $1/$OUTPUT_FILE
 rm x
 
-cat ./20220405/cases-location-clear.txt ./20220406/cases-location-clear.txt ./20220407/cases-location-clear.txt ./20220408/cases-location-clear.txt ./20220409/cases-location-clear.txt ./20220410/cases-location-clear.txt ./20220411/cases-location-clear.txt | sort | uniq > $1/$OUTPUT_FILE.v1
+cat \
+	./20220409/cases-location-clear.txt \
+	./20220410/cases-location-clear.txt \
+	./20220411/cases-location-clear.txt | \
+	sort | uniq > $1/$OUTPUT_FILE.v1
+
