@@ -6,12 +6,12 @@ python merg.py x | sort | uniq > $1/$OUTPUT_FILE
 rm x
 
 cat \
-	./20220406/cases-location-clear.txt \
 	./20220407/cases-location-clear.txt \
 	./20220408/cases-location-clear.txt \
 	./20220409/cases-location-clear.txt \
 	./20220410/cases-location-clear.txt \
 	./20220411/cases-location-clear.txt \
-	./20220412/cases-location-clear.txt | \
+	./20220412/cases-location-clear.txt \
+	./20220413/cases-location-clear.txt | \
 	sort | uniq > $1/$OUTPUT_FILE.v1
 
