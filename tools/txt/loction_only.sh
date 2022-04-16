@@ -8,13 +8,13 @@ rm x
 cp $1/$OUTPUT_FILE $1/$OUTPUT_FILE.v0
 
 cat \
-	./20220409/cases-location-clear.txt.v0 \
 	./20220410/cases-location-clear.txt.v0 \
 	./20220411/cases-location-clear.txt.v0 \
 	./20220412/cases-location-clear.txt.v0 \
 	./20220413/cases-location-clear.txt.v0 \
 	./20220414/cases-location-clear.txt.v0 \
 	./20220415/cases-location-clear.txt.v0 \
+	./20220416/cases-location-clear.txt.v0 \
 	| sort | uniq > $1/$OUTPUT_FILE.v1
 
 cp $1/$OUTPUT_FILE.v1 $1/$OUTPUT_FILE
