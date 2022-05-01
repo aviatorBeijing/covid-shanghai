@@ -146,7 +146,8 @@
             var map = getMap();
 	    topic = '新增&7日病例地址'
             fromUrl = '<a href="https://wsjkw.sh.gov.cn/xwfb/index.html" target="_blank">数据源</a>（更新:2022/04/30 11:24:00）'
-            authorName = '<span class=author>by: j.ma (AT) westbundgroup (DOT) com </span>'
+            authorName = '<span class=author>by: j.ma (AT) westbundgroup (DOT) com </span>';
+	    authorName += '<p> 结束：因为自今日（2022/05/01）起，所有新增病例均来自隔离区，所以我认为“动态清零”的目标已经达成，已无社会面的新增病例。The update of this repo is paused starting from today (2022/05/01), because the newly discovered cases are all from the organized quarantine area, therefore the "community-wise zero case" policy objective has been reached. </p>';
             document.getElementById('printoutPanel').innerHTML = "<div class='annotate'>" + topic + fromUrl + authorName + "</div>";
 
             //pushpinInfos (from data.js)
